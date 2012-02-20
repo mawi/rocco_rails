@@ -2,7 +2,7 @@
 require File.expand_path('../lib/rocco_rails/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Mawi Marín"]
+  gem.authors       = ["Mawi Marin"]
   gem.email         = ["mawitu@gmail.com"]
   gem.description   = %q{TODO: Write a gem description}
   gem.summary       = %q{TODO: Write a gem summary}
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "rocco_rails"
   gem.require_paths = ["lib"]
   gem.version       = RoccoRails::VERSION
+
+  gem.add_dependency 'rocco'
 end
