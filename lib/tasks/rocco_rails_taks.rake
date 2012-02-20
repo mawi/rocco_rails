@@ -5,7 +5,21 @@ begin
 
   desc 'Build rocco docs'
   task :rocco
-  Rocco::make 'docs/', ["app/models/*.rb", "app/controllers/*.rb"]
+
+  begin
+    config = YAML.load_file(Rails.root.to_s + "/config/rocco.yml")
+    template = Rails.root.to_s + config["template"]
+  rescue Exception => e
+    gem_path = Gem.loaded_specs['rocco_rails'].full_gem_path
+    config = YAML.load_file( gem_path + "/lib/config/rocco.yml")
+    template = gem_path + "/"+ config["template"]
+  end
+
+  out = config["output"]
+
+  #Rocco::make 'docs/', ["app/models/*.rb", "app/controllers/*.rb"]
+  # TODO Only for testing
+  Rocco::make out, ["vendor/plugins/rocco/lib/*.rb", "vendor/plugins/rocco/lib/rocco/*.rb"], {:template_file => template}
 
   desc 'Build docs and open in browser for the reading'
   task :read => :rocco do

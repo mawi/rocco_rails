@@ -1,0 +1,2 @@
+output: "docs/"
+template: "lib/templates/layout.mustache"
