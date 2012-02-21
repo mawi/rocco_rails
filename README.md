@@ -6,6 +6,7 @@ Rocco gem for rails
 
 Add this line to your application's Gemfile:
 
+    gem 'rocco', :git => "git://github.com/rtomayko/rocco.git"
     gem 'rocco_rails'
 
 And then execute:

@@ -22,10 +22,8 @@ begin
   stylesheet = [Rails.root.to_s, out, "resources", config["stylesheet_name"]].join("/")
   resources_path = base_path + config["resources_path"]
 
+  Rocco::make out, ["app/models/*.rb", "app/controllers/*.rb", "app/helpers/*.rb", "config/*.rb", "lib/tasks/*.rake"], {:template_file => template, :stylesheet => RoccoRails.generate_resources(resources_path, [Rails.root.to_s, out, "resources"].join("/")) }
 
-  #Rocco::make 'docs/', ["app/models/*.rb", "app/controllers/*.rb", "app/uploaders/*.rb", "app/workers/*.rb"], {:template_file => template, :stylesheet => RoccoRails.generate_resources(resources_path, [Rails.root.to_s, out, "resources"].join("/")) }
-  # TODO Only for testing
-  Rocco::make out, ["vendor/plugins/rocco/lib/*.rb", "vendor/plugins/rocco/lib/rocco/*.rb"], {:template_file => template, :stylesheet => RoccoRails.generate_resources(resources_path, [Rails.root.to_s, out, "resources"].join("/")) }
 
   # Copy resources folder to out folder
   FileUtils.mkdir_p(out + "/resources") if Dir[out].blank?

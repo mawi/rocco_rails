@@ -12,22 +12,26 @@
   <table cellspacing=0 cellpadding=0>
   <thead>
     <tr>
-      <th class=docs><h1>{{ title }}</h1></th>
-      <th class=code>
+
+      <th class='docs list'>
 
         {{#sources?}}
-          <a href="#" id="jump-to">
-            Jump To &hellip;
-          </a>
+          <div id = 'list'>
+            <b>Jump To &hellip;</b>
           <ul id="sources">
             {{#sources}}
               <li><a class="source" href="{{ url }}" data-path="{{ path }}">{{ basename }}</a></li>
             {{/sources}}
           </ul>
+          </div>
         {{/sources?}}
 
 
       </th>
+      <th class=code>
+        <h1>{{ title }}</h1>
+        <p class=hint> {{ file }} </p>
+        </th>
     </tr>
   </thead>
   <tbody>
