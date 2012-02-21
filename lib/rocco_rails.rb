@@ -3,6 +3,8 @@ require "rocco"
 
 module RoccoRails
 
+    require 'rocco_rails/railtie' if defined?(Rails)
+
     def self.generate_resources(path, rocco_out)
       files = Dir.entries(path) - [".", ".."]
       out = ""
