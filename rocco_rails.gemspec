@@ -4,8 +4,8 @@ require File.expand_path('../lib/rocco_rails/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Mawi Marin"]
   gem.email         = ["mawitu@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = "Rocco gem for rails"
+  gem.summary       = gem.description
   gem.homepage      = ""
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
@@ -16,4 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = RoccoRails::VERSION
 
   gem.add_dependency 'rocco'
+  gem.add_dependency 'redcarpet', '~> 1.17'
+  gem.add_dependency 'mustache'
 end

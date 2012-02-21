@@ -1,2 +1,4 @@
-output: "docs/"
+output: "docs"
 template: "lib/templates/layout.mustache"
+resources_path: "lib/templates/resources"
+stylesheet_name: "rocco.css"

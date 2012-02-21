@@ -3,32 +3,36 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <title>{{ title }}</title>
-  <link rel="stylesheet" href="{{ stylesheet }}">
+  {{& stylesheet }}
 </head>
 <body>
-  <h1> RULAAAAAAAAAAAA </h1>
+
 <div id='container'>
   <div id="background"></div>
-  {{#sources?}}
-  <div id="jump_to">
-    Jump To &hellip;
-    <div id="jump_wrapper">
-      <div id="jump_page">
-        {{#sources}}
-          <a class="source" href="{{ url }}">{{ basename }}</a>
-        {{/sources}}
-      </div>
-    </div>
-  </div>
-  {{/sources?}}
   <table cellspacing=0 cellpadding=0>
   <thead>
     <tr>
       <th class=docs><h1>{{ title }}</h1></th>
-      <th class=code></th>
+      <th class=code>
+
+        {{#sources?}}
+          <a href="#" id="jump-to">
+            Jump To &hellip;
+          </a>
+          <ul id="sources">
+            {{#sources}}
+              <li><a class="source" href="{{ url }}" data-path="{{ path }}">{{ basename }}</a></li>
+            {{/sources}}
+          </ul>
+        {{/sources?}}
+
+
+      </th>
     </tr>
   </thead>
   <tbody>
+
+    </tr>
     {{#sections}}
     <tr id='section-{{ section_id }}'>
       <td class=docs>

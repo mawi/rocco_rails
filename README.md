@@ -1,6 +1,6 @@
 # RoccoRails
 
-TODO: Write a gem description
+Rocco gem for rails
 
 ## Installation
 
@@ -12,13 +12,13 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+<!-- Or install it yourself as:
 
-    $ gem install rocco_rails
+    $ gem install rocco_rails  -->
 
 ## Usage
 
-TODO: Write usage instructions here
+Use 'rake rocco' to generate app's docs. Default directory is 'docs'
 
 ## Contributing
 
