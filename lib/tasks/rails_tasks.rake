@@ -48,7 +48,7 @@ namespace :rails do
       @menu = RoccoRails.generate_menu(@out)
       @title = "Rocco Documentation"
       ["menu", "index"].each do |page|
-        template = File.read("/Users/mmarin/Work/rocco_rails/lib/templates/#{page}.erb")
+        template = File.read(@gem_path + "lib/templates/#{page}.erb")
         html = ERB.new(template, 0, "%<>").result
         File.open(@out + "/#{page}.html", 'w') {|f| f.write(html) }
       end
