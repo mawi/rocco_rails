@@ -1,4 +1,5 @@
-output: "docs"
-template: "lib/templates/layout.mustache"
-resources_path: "lib/templates/resources"
-stylesheet_name: "rocco.css"
+output: docs
+template: lib/templates/layout.mustache
+resources_path: lib/templates/resources
+excluded_items: config/, spec/, db/
+

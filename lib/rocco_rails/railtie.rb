@@ -7,7 +7,7 @@ module RoccoRails
     railtie_name :rocco_rails
 
     rake_tasks do
-      load "tasks/rocco_rails_tasks.rake"
+      load "tasks/rails_tasks.rake"
     end
   end
 end
