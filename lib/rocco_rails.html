@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>rocco_rails.rb</title>
+  <link rel='stylesheet' href='/Users/mmarin/Work/rocco_rails/docs/resources/rocco.css'>
+
+</head>
+<body>
+
+<div id='container'>
+  <div id="background"></div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+
+      <th class='docs'>
+        <h1>rocco_rails.rb</h1>
+        <p class=hint> lib/rocco_rails.rb </p>
+        </th>
+
+      <th class=code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+
+    </tr>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../rocco_rails/lib/rocco_rails/version.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="s2">&quot;rocco&quot;</span>
+
+<span class="k">module</span> <span class="nn">RoccoRails</span>
+
+    <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="nb">require</span> <span class="s1">&#39;rocco_rails/railtie&#39;</span> <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Rails</span><span class="p">)</span>
+    <span class="kp">include</span> <span class="no">Rake</span><span class="o">::</span><span class="no">DSL</span> <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Rake</span><span class="o">::</span><span class="no">DSL</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Rocco only use a var named stylesheet supposed to be the path for the stylesheet. This is a little hack to use it to
+ inject a complete directory. Default is /resources</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">generate_resources</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rocco_out</span><span class="p">)</span>
+      <span class="n">files</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">.</span><span class="n">entries</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">-</span> <span class="o">[</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="o">]</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">files</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+          <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;&lt;link rel=&#39;stylesheet&#39; href=&#39;</span><span class="si">#{</span><span class="o">[</span><span class="n">rocco_out</span><span class="p">,</span> <span class="n">file</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">end_with?</span><span class="p">(</span><span class="s2">&quot;.css&quot;</span><span class="p">)</span>
+          <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;&lt;script src=&#39;</span><span class="si">#{</span><span class="o">[</span><span class="n">rocco_out</span><span class="p">,</span> <span class="n">file</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&gt;&lt;/script&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">end_with?</span><span class="p">(</span><span class="s2">&quot;.js&quot;</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="n">out</span>
+
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">generate_file_list</span><span class="p">(</span><span class="n">excuded_items</span> <span class="o">=</span> <span class="o">[]</span><span class="p">)</span>
+      <span class="n">rails_files</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;*.rb&quot;</span><span class="p">))</span>
+      <span class="n">excuded_items</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">excluded</span><span class="o">|</span>
+        <span class="n">rails_files</span><span class="o">.</span><span class="n">delete_if</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">excluded</span><span class="p">)}</span>
+      <span class="k">end</span>
+      <span class="n">rails_files</span>
+    <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>http://stackoverflow.com/questions/760233/generate-a-file-list-based-on-an-array</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">generate_menu</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+      <span class="n">old_pwd</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">.</span><span class="n">pwd</span>
+      <span class="no">Dir</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+      <span class="n">dirs</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">[</span><span class="s2">&quot;**/*.html&quot;</span><span class="o">]</span>
+      <span class="no">Dir</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">old_pwd</span><span class="p">)</span>
+
+      <span class="n">tree</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">menu</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+      <span class="n">dirs</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">path</span><span class="o">|</span>
+        <span class="n">current</span>  <span class="o">=</span> <span class="n">tree</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">sub_path</span><span class="p">,</span><span class="n">dir</span><span class="o">|</span>
+          <span class="n">sub_path</span> <span class="o">=</span> <span class="n">sub_path</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="p">?</span> <span class="n">sub_path</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="p">:</span> <span class="n">sub_path</span>
+          <span class="n">sub_path</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_path</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span>
+          <span class="n">current</span><span class="o">[</span><span class="n">sub_path</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
+          <span class="n">current</span>  <span class="o">=</span> <span class="n">current</span><span class="o">[</span><span class="n">sub_path</span><span class="o">]</span>
+          <span class="n">sub_path</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+      <span class="k">return</span> <span class="n">print_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+    <span class="k">end</span>
+
+
+    <span class="kp">protected</span>
+
+    <span class="k">def</span> <span class="nf">print_tree</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;&lt;ul&gt;&quot;</span>
+      <span class="n">node</span><span class="o">.</span><span class="n">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">path</span><span class="p">,</span> <span class="n">subtree</span><span class="o">|</span>
+        <span class="n">out</span> <span class="o">+=</span>  <span class="n">path</span><span class="o">.</span><span class="n">end_with?</span><span class="p">(</span><span class="s2">&quot;.html&quot;</span><span class="p">)</span> <span class="p">?</span> <span class="s2">&quot;&lt;li&gt; &lt;a href=&#39;</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39;&gt; </span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span> <span class="p">:</span> <span class="s2">&quot;&lt;li&gt;</span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">print_tree</span><span class="p">(</span><span class="n">subtree</span><span class="p">)</span> <span class="k">unless</span> <span class="n">subtree</span><span class="o">.</span><span class="n">empty?</span>
+      <span class="k">end</span>
+      <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/li&gt;&lt;/ul&gt;&quot;</span>
+      <span class="k">return</span> <span class="n">out</span>
+    <span class="k">end</span>
+
+
+   <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>rails_tasks.rake</title>
+  <link rel='stylesheet' href='/Users/mmarin/Work/rocco_rails/docs/resources/rocco.css'>
+
+</head>
+<body>
+
+<div id='container'>
+  <div id="background"></div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+
+      <th class='docs'>
+        <h1>rails_tasks.rake</h1>
+        <p class=hint> lib/tasks/rails_tasks.rake </p>
+        </th>
+
+      <th class=code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+
+    </tr>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>Taken from https://github.com/hotsh/rstat.us/blob/master/lib/tasks/rocco.rake and
+https://github.com/rtomayko/rocco/blob/master/lib/rocco/tasks.rb</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;rocco/tasks&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
+
+<span class="n">namespace</span> <span class="ss">:rails</span> <span class="k">do</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>If exists a config/rocco.yml in rails path use it</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">load_config</span>
+      <span class="vi">@gem_path</span> <span class="o">=</span> <span class="no">Gem</span><span class="o">.</span><span class="n">loaded_specs</span><span class="o">[</span><span class="s1">&#39;rocco_rails&#39;</span><span class="o">].</span><span class="n">full_gem_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+      <span class="n">gem_config</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="vi">@gem_path</span> <span class="o">+</span> <span class="s2">&quot;lib/config/rocco.yml&quot;</span><span class="p">)</span>
+      <span class="k">begin</span>
+        <span class="vi">@base_path</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">to_s</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="n">rails_config</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="vi">@base_path</span> <span class="o">+</span> <span class="s2">&quot;config/rocco.yml&quot;</span><span class="p">)</span>
+        <span class="vi">@config</span> <span class="o">=</span> <span class="n">gem_config</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">rails_config</span><span class="p">)</span>
+      <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
+        <span class="vi">@base_path</span> <span class="o">=</span> <span class="vi">@gem_path</span>
+        <span class="vi">@config</span> <span class="o">=</span> <span class="n">gem_config</span>
+      <span class="k">end</span>
+
+      <span class="vi">@out</span> <span class="o">=</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;output&quot;</span><span class="o">]</span>
+
+      <span class="n">template</span> <span class="o">=</span> <span class="vi">@base_path</span> <span class="o">+</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;template&quot;</span><span class="o">]</span>
+      <span class="vi">@template</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="n">template</span><span class="p">)</span> <span class="p">?</span> <span class="n">template</span> <span class="p">:</span> <span class="vi">@gem_path</span> <span class="o">+</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;template&quot;</span><span class="o">]</span>
+
+      <span class="n">resources_path</span> <span class="o">=</span> <span class="vi">@base_path</span> <span class="o">+</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;resources_path&quot;</span><span class="o">]</span>
+      <span class="vi">@resources_path</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="n">resources_path</span><span class="p">)</span> <span class="p">?</span> <span class="n">resources_path</span> <span class="p">:</span> <span class="vi">@gem_path</span> <span class="o">+</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;resources_path&quot;</span><span class="o">]</span>
+
+      <span class="vi">@excluded_items</span> <span class="o">=</span>  <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;excluded_items&quot;</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+
+    <span class="k">end</span>
+
+
+
+    <span class="n">desc</span> <span class="s1">&#39;Build rocco docs&#39;</span>
+    <span class="n">task</span> <span class="ss">:rocco_docs</span>
+
+      <span class="n">load_config</span>
+      <span class="no">Rocco</span><span class="o">::</span><span class="no">Task</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:rocco_docs</span><span class="p">,</span> <span class="vi">@out</span><span class="p">,</span> <span class="no">RoccoRails</span><span class="o">.</span><span class="n">generate_file_list</span><span class="p">(</span><span class="vi">@excluded_items</span><span class="p">),</span> <span class="p">{</span><span class="ss">:template_file</span> <span class="o">=&gt;</span> <span class="vi">@template</span><span class="p">,</span> <span class="ss">:stylesheet</span> <span class="o">=&gt;</span> <span class="no">RoccoRails</span><span class="o">.</span><span class="n">generate_resources</span><span class="p">(</span><span class="vi">@resources_path</span><span class="p">,</span> <span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span> <span class="vi">@out</span><span class="p">,</span> <span class="s2">&quot;resources&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span> <span class="p">})</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Copy resources folder to out folder</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="p">(</span><span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/resources&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="no">Dir</span><span class="o">[</span><span class="vi">@out</span><span class="o">].</span><span class="n">blank?</span>
+      <span class="no">FileUtils</span><span class="o">.</span><span class="n">cp_r</span><span class="p">(</span><span class="vi">@resources_path</span><span class="p">,</span> <span class="vi">@out</span><span class="p">)</span>
+
+
+    <span class="n">desc</span> <span class="s1">&#39;Generates and index.html for a rocco folder&#39;</span>
+    <span class="n">task</span> <span class="ss">:rocco_index</span> <span class="k">do</span>
+      <span class="n">load_config</span>
+      <span class="vi">@menu</span> <span class="o">=</span> <span class="no">RoccoRails</span><span class="o">.</span><span class="n">generate_menu</span><span class="p">(</span><span class="vi">@out</span><span class="p">)</span>
+      <span class="vi">@title</span> <span class="o">=</span> <span class="s2">&quot;Rocco Documentation&quot;</span>
+      <span class="o">[</span><span class="s2">&quot;menu&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="vi">@gem_path</span> <span class="o">+</span> <span class="s2">&quot;lib/templates/</span><span class="si">#{</span><span class="n">page</span><span class="si">}</span><span class="s2">.erb&quot;</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="no">ERB</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;%&lt;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">result</span>
+        <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">#{</span><span class="n">page</span><span class="si">}</span><span class="s2">.html&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span> <span class="p">}</span>
+      <span class="k">end</span>
+      <span class="no">FileUtils</span><span class="o">.</span><span class="n">cp_r</span><span class="p">(</span><span class="vi">@gem_path</span><span class="o">+</span><span class="s2">&quot;lib/templates/menu_resources/.&quot;</span><span class="p">,</span> <span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/resources&quot;</span><span class="p">)</span>
+
+    <span class="k">end</span>
+
+    <span class="n">desc</span> <span class="s1">&#39;Test actual config.yml&#39;</span>
+    <span class="n">task</span> <span class="ss">:test_rocco_config</span> <span class="k">do</span>
+      <span class="n">load_config</span>
+
+
+      <span class="nb">p</span> <span class="s2">&quot;Template exist =&gt; </span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="vi">@template</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="nb">p</span> <span class="s2">&quot;Resources exist =&gt; </span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="vi">@resources_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="nb">p</span> <span class="s2">&quot;List of files to generate docs =&gt; </span><span class="si">#{</span><span class="no">RoccoRails</span><span class="o">.</span><span class="n">generate_file_list</span><span class="p">(</span><span class="vi">@excluded_items</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">end</span>
+
+    <span class="n">desc</span> <span class="s1">&#39;Copy rocco.yml to rails config path&#39;</span>
+    <span class="n">task</span> <span class="ss">:rocco_setup</span> <span class="k">do</span>
+      <span class="n">yml_path</span> <span class="o">=</span> <span class="o">[</span><span class="no">Gem</span><span class="o">.</span><span class="n">loaded_specs</span><span class="o">[</span><span class="s1">&#39;rocco_rails&#39;</span><span class="o">].</span><span class="n">full_gem_path</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;rocco.yml.sample&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+      <span class="no">FileUtils</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="n">yml_path</span><span class="p">,</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">to_s</span> <span class="o">+</span> <span class="s2">&quot;/config/rocco.yml&quot;</span><span class="p">)</span>
+      <span class="nb">p</span> <span class="s2">&quot;rocco.yml copied to config/rocco.yml&quot;</span>
+    <span class="k">end</span>
+
+    <span class="n">task</span> <span class="ss">:rocco</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:rocco_docs</span><span class="p">,</span> <span class="ss">:rocco_index</span><span class="o">]</span>
+
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
