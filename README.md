@@ -47,6 +47,8 @@ Default rocco.yml:
 * resources_path => if you have your own template and want to use your .css or .js just put it into this directory. It will be copied and linked in generated docs
 * excluded_items => A comma separated list of directories not to look into
 
+Your custom rocco.yml doesn't have to have all options. It will merge whit gem's config. Sample rocco.yml would be good if you don't have a custom template.
+
 You can test your rocco.yml running
 
     rake rails:test_rocco_config

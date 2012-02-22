@@ -6,18 +6,25 @@ require 'erb'
 namespace :rails do
      # If exists a config/rocco.yml in rails path use it
     def load_config
+      @gem_path = Gem.loaded_specs['rocco_rails'].full_gem_path + "/"
+      gem_config = YAML.load_file(@gem_path + "lib/config/rocco.yml")
       begin
         @base_path = Rails.root.to_s + "/"
-        @config = YAML.load_file(@base_path + "config/rocco.yml")
+        rails_config = YAML.load_file(@base_path + "config/rocco.yml")
+        @config = gem_config.merge(rails_config)
       rescue Exception => e
-        @base_path = Gem.loaded_specs['rocco_rails'].full_gem_path + "/"
-        @gem_path = @base_path
-        @config = YAML.load_file(@base_path + "lib/config/rocco.yml")
+        @base_path = @gem_path
+        @config = gem_config
       end
 
       @out = @config["output"]
-      @template = @base_path + @config["template"]
-      @resources_path = @base_path + @config["resources_path"]
+
+      template = @base_path + @config["template"]
+      @template = File.exists?(template) ? template : @gem_path + @config["template"]
+
+      resources_path = @base_path + @config["resources_path"]
+      @resources_path = File.exists?(resources_path) ? resources_path : @gem_path + @config["resources_path"]
+
       @excluded_items =  @config["excluded_items"].split(", ")
 
     end
@@ -60,7 +67,7 @@ namespace :rails do
 
     desc 'Copy rocco.yml to rails config path'
     task :rocco_setup do
-      yml_path = [Gem.loaded_specs['rocco_rails'].full_gem_path, "lib", "config", "rocco.yml"].join("/")
+      yml_path = [Gem.loaded_specs['rocco_rails'].full_gem_path, "lib", "config", "rocco.yml.sample"].join("/")
       FileUtils.cp(yml_path, Rails.root.to_s + "/config/rocco.yml")
       p "rocco.yml copied to config/rocco.yml"
     end

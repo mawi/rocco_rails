@@ -1,0 +1,3 @@
+output: docs_out
+excluded_items: config/, spec/, db/
+
