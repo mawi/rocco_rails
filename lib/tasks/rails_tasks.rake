@@ -40,7 +40,6 @@ namespace :rails do
       load_config
       @menu = RoccoRails.generate_menu(@out)
       @title = "Rocco Documentation"
-      p @menu
       ["menu", "index"].each do |page|
         template = File.read("/Users/mmarin/Work/rocco_rails/lib/templates/#{page}.erb")
         html = ERB.new(template, 0, "%<>").result

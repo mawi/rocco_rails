@@ -84,36 +84,6 @@ table td {
       margin: 0; padding: 0;
     }
 
-
-  th.docs {
-    font-size :80%;
-    font-weight: normal;
-    border-bottom: 1px solid #E5E5EE;
-    line-height: 20px;
-  }
-
-  th.list {
-    padding: 0;
-    padding-left: 10px;
-  }
-
-  th.docs #list {
-    height: 150px;
-    overflow: auto;
-    padding: 0;
-  }
-
-  #list ul {
-    margin: 5px 0 0 20px;
-    padding: 0;
-  }
-
-  #list ul li {
-    float: left;
-    list-style: none;
-    width:150px;
-  }
-
   p.hint {
     font-size: 80%;
     font-style: italic;
