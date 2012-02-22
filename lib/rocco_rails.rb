@@ -1,4 +1,4 @@
-require "rocco_rails/version"
+require File.expand_path('../rocco_rails/lib/rocco_rails/version.rb')
 require "rocco"
 
 module RoccoRails
@@ -43,7 +43,7 @@ module RoccoRails
       dirs.each do |path|
         current  = tree
         path.split("/").inject("") do |sub_path,dir|
-          sub_path = sub_path.starts_with?("/") ? sub_path[1..-1] : sub_path
+          sub_path = sub_path[0] == ("/") ? sub_path[1..-1] : sub_path
           sub_path = File.join(sub_path, dir)
           current[sub_path] ||= {}
           current  = current[sub_path]

@@ -1,0 +1,70 @@
+<html>
+<head>
+  <script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="resources/jquery.simpletreeview.min.js"></script>
+  <link rel="stylesheet" href="resources/jquery.treeview.css" type="text/css" >
+  <style TYPE="text/css">
+    <!--
+      body {
+        font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+        font-size: 15px;
+        line-height: 22px;
+        color: #252519;
+        margin: 0; padding: 0;
+      }
+
+      a {
+        text-decoration:none;
+      }
+
+      a {
+        color: #261a3b;
+      }
+        a:visited {
+          color: #261a3b;
+        }
+
+
+      #nav {
+        padding:0;
+        font-size:80%;
+      }
+
+      #nav ul:first-child {
+        padding:0;
+      }
+
+      li{
+        list-style-type:none;
+        }
+
+
+
+    -->
+  </style>
+
+  <script type = "text/javascript">
+  $(document).ready(function(){
+
+      $("ul").first().simpletreeview({
+        slide: true,
+        speed: 'fast',
+        collapsed: true,
+        expand: '0.0'
+        });
+
+
+  });
+
+
+  </script>
+
+  <base target="rocco">
+</head>
+<body>
+  <div id="nav">
+    Jump to ...
+    <ul><li>lib<ul><li>rocco_rails<ul><li> <a href='lib/rocco_rails/railtie.html'> railtie.html</a><li> <a href='lib/rocco_rails/version.html'> version.html</a></li></ul><li> <a href='lib/rocco_rails.html'> rocco_rails.html</a><li>tasks<ul><li> <a href='lib/tasks/rails_tasks.html'> rails_tasks.html</a><li> <a href='lib/tasks/rocco_tasks.html'> rocco_tasks.html</a></li></ul></li></ul></li></ul>
+  </div>
+<body>
+</html>
