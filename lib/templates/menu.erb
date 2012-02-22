@@ -1,8 +1,69 @@
 <html>
 <head>
+  <script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="resources/jquery.simpletreeview.min.js"></script>
+  <link rel="stylesheet" href="resources/jquery.treeview.css" type="text/css" >
+  <style TYPE="text/css">
+    <!--
+      body {
+        font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+        font-size: 15px;
+        line-height: 22px;
+        color: #252519;
+        margin: 0; padding: 0;
+      }
+
+      a {
+        text-decoration:none;
+      }
+
+      a {
+        color: #261a3b;
+      }
+        a:visited {
+          color: #261a3b;
+        }
+
+
+      #nav {
+        padding:0;
+        font-size:80%;
+      }
+
+      #nav ul:first-child {
+        padding:0;
+      }
+
+      li{
+        list-style-type:none;
+        }
+
+
+
+    -->
+  </style>
+
+  <script type = "text/javascript">
+  $(document).ready(function(){
+
+      $("ul").first().simpletreeview({
+        slide: true,
+        speed: 'fast',
+        collapsed: true,
+        expand: '0.0'
+        });
+
+
+  });
+
+
+  </script>
+
   <base target="rocco">
 </head>
 <body>
-<%= @menu %>
+  <div id="nav">
+    <%= @menu %>
+  </div>
 <body>
 </html>

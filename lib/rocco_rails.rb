@@ -60,10 +60,10 @@ module RoccoRails
       out = ""
       out += "<ul>"
       node.each_pair do |path, subtree|
-        out +=  path.end_with?(".html") ? "<li> <a href='#{path}'> #{File.basename(path)}</a></li>" : "<li>#{File.basename(path)}</li>"
+        out +=  path.end_with?(".html") ? "<li> <a href='#{path}'> #{File.basename(path)}</a>" : "<li>#{File.basename(path)}"
         out += print_tree(subtree) unless subtree.empty?
       end
-      out += "</ul>"
+      out += "</li></ul>"
       return out
     end
 

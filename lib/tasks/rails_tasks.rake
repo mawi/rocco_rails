@@ -52,6 +52,7 @@ namespace :rails do
         html = ERB.new(template, 0, "%<>").result
         File.open(@out + "/#{page}.html", 'w') {|f| f.write(html) }
       end
+      FileUtils.cp_r(@gem_path+"lib/templates/menu_resources/.", @out + "/resources")
 
     end
 
