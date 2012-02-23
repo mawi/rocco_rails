@@ -21,7 +21,7 @@ documentation generator in CoffeeScript:
 Add this lines to your application's Gemfile:
 
     gem 'rocco', :git => "git://github.com/rtomayko/rocco.git"
-    gem 'rocco_rails', '~> 0.8.1'
+    gem 'rocco_rails', '~> 0.9'
 
 ## Usage
 
