@@ -37,6 +37,7 @@ https://github.com/rtomayko/rocco/blob/master/lib/rocco/tasks.rb</p>
       <td class=code>
         <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;rocco/tasks&#39;</span>
 <span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;github/markup&#39;</span>
 
 <span class="n">namespace</span> <span class="ss">:rails</span> <span class="k">do</span></pre></div>
       </td>
@@ -71,6 +72,7 @@ https://github.com/rtomayko/rocco/blob/master/lib/rocco/tasks.rb</p>
 
       <span class="vi">@excluded_items</span> <span class="o">=</span>  <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;excluded_items&quot;</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
 
+
     <span class="k">end</span>
 
 
@@ -100,12 +102,19 @@ https://github.com/rtomayko/rocco/blob/master/lib/rocco/tasks.rb</p>
       <span class="n">load_config</span>
       <span class="vi">@menu</span> <span class="o">=</span> <span class="no">RoccoRails</span><span class="o">.</span><span class="n">generate_menu</span><span class="p">(</span><span class="vi">@out</span><span class="p">)</span>
       <span class="vi">@title</span> <span class="o">=</span> <span class="s2">&quot;Rocco Documentation&quot;</span>
+      <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;index&quot;</span><span class="o">]</span><span class="p">)</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="vi">@config</span><span class="o">[</span><span class="s2">&quot;index&quot;</span><span class="o">]</span>
+        <span class="n">readme_html</span> <span class="o">=</span> <span class="no">GitHub</span><span class="o">::</span><span class="no">Markup</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+        <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/README.html&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">readme_html</span><span class="p">)}</span>
+        <span class="vi">@index_page</span> <span class="o">=</span> <span class="s2">&quot;README.html&quot;</span>
+      <span class="k">end</span>
       <span class="o">[</span><span class="s2">&quot;menu&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
         <span class="n">template</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="vi">@gem_path</span> <span class="o">+</span> <span class="s2">&quot;lib/templates/</span><span class="si">#{</span><span class="n">page</span><span class="si">}</span><span class="s2">.erb&quot;</span><span class="p">)</span>
         <span class="n">html</span> <span class="o">=</span> <span class="no">ERB</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;%&lt;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">result</span>
         <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">#{</span><span class="n">page</span><span class="si">}</span><span class="s2">.html&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span> <span class="p">}</span>
       <span class="k">end</span>
       <span class="no">FileUtils</span><span class="o">.</span><span class="n">cp_r</span><span class="p">(</span><span class="vi">@gem_path</span><span class="o">+</span><span class="s2">&quot;lib/templates/menu_resources/.&quot;</span><span class="p">,</span> <span class="vi">@out</span> <span class="o">+</span> <span class="s2">&quot;/resources&quot;</span><span class="p">)</span>
+
 
     <span class="k">end</span>
 
