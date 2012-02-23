@@ -2,6 +2,7 @@
 # https://github.com/rtomayko/rocco/blob/master/lib/rocco/tasks.rb
 require 'rocco/tasks'
 require 'erb'
+require 'github/markup'
 
 namespace :rails do
      # If exists a config/rocco.yml in rails path use it
@@ -27,6 +28,7 @@ namespace :rails do
 
       @excluded_items =  @config["excluded_items"].split(", ")
 
+
     end
 
 
@@ -47,12 +49,19 @@ namespace :rails do
       load_config
       @menu = RoccoRails.generate_menu(@out)
       @title = "Rocco Documentation"
+      if File.exists?(@config["index"])
+        file = @config["index"]
+        readme_html = GitHub::Markup.render(file, File.read(file))
+        File.open(@out + "/README.html", 'w') {|f| f.write(readme_html)}
+        @index_page = "README.html"
+      end
       ["menu", "index"].each do |page|
         template = File.read(@gem_path + "lib/templates/#{page}.erb")
         html = ERB.new(template, 0, "%<>").result
         File.open(@out + "/#{page}.html", 'w') {|f| f.write(html) }
       end
       FileUtils.cp_r(@gem_path+"lib/templates/menu_resources/.", @out + "/resources")
+
 
     end
 

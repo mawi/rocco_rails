@@ -2,6 +2,8 @@ require File.expand_path('../rocco_rails/lib/rocco_rails.rb')
 
 require 'rocco/tasks'
 require 'erb'
+require 'github/markup'
+
 
 
     def load_config
@@ -23,7 +25,13 @@ require 'erb'
     task :rocco_index do
       load_config
       @menu = RoccoRails.generate_menu(@out)
-      @title = "Rocco Documentation"
+      @title = "rocco_rails Documentation"
+      if File.exists?(@config["index"])
+        file = @config["index"]
+        readme_html = GitHub::Markup.render(file, File.read(file))
+        File.open(@out + "/README.html", 'w') {|f| f.write(readme_html)}
+        @index_page = "README.html"
+      end
       ["menu", "index"].each do |page|
         template = File.read("lib/templates/#{page}.erb")
         html = ERB.new(template, 0, "%<>").result

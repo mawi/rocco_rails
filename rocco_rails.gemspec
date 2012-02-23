@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'rocco'
   gem.add_dependency 'redcarpet', '~> 1.17'
+  gem.add_dependency 'github-markup'
   gem.add_dependency 'mustache'
   gem.add_dependency 'pygmentize'
 end

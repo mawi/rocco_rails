@@ -1,3 +1,5 @@
-output: docs_out
+output: docs
 excluded_items: config/, spec/, db/
+index: README.rdoc
+
 
