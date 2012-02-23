@@ -14,7 +14,7 @@ require 'erb'
     desc 'Build rocco_rails docs'
     task :rocco_docs
       load_config
-      Rocco::make(@out, Dir["**/*.rb"] + Dir["**/*.rake"], {:template_file => @template, :stylesheet => RoccoRails.generate_resources(@resources_path, [File.expand_path(@out), "resources"].join("/")) })
+      Rocco::make(@out, Dir["**/*.rb"] + Dir["**/*.rake"], {:template_file => @template, :stylesheet => RoccoRails.generate_resources(@resources_path, "/rocco_rails/resources") })
 
       # Copy resources folder to out folder
 

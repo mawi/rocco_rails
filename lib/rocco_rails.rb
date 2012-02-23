@@ -1,4 +1,4 @@
-require File.expand_path('../rocco_rails/lib/rocco_rails/version.rb')
+require File.expand_path('../../lib/rocco_rails/version', __FILE__)
 require "rocco"
 
 module RoccoRails
